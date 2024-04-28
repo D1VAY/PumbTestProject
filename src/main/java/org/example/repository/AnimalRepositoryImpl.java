@@ -22,6 +22,6 @@ public class AnimalRepositoryImpl implements AnimalRepository {
 
     @Override
     public void deleteById(Long id) {
-
+        animals.remove(id);
     }
 }
