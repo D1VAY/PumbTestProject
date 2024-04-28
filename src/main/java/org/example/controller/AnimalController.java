@@ -9,11 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/animals")
 public class AnimalController {
     private final AnimalService animalService;
+
 
     @Autowired
     public AnimalController(AnimalService animalService) {
@@ -22,8 +26,20 @@ public class AnimalController {
 
     // Метод для создания нового животного (POST запрос)
     @PostMapping
-    public ResponseEntity<Void> createAnimal(@RequestBody Animal animal) {
-        animalService.saveAnimal(animal);
-        return new ResponseEntity<Void>(HttpStatus.CREATED);
+    public ResponseEntity<?> createAnimal(@RequestBody MultipartFile multipartFile) {
+        if (multipartFile.isEmpty()) {
+            return new ResponseEntity<String>("File is empty", HttpStatus.BAD_REQUEST);
+        }
+        try {
+            String fileContent = new String(multipartFile.getBytes());
+
+            Animal animal = animalService.parseAnimalInfoFromFile(fileContent);
+
+            animalService.saveAnimal(animal);
+
+            return new ResponseEntity<Void>(HttpStatus.CREATED);
+        } catch (IOException e) {
+            return new ResponseEntity<String>("Uploaded file", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

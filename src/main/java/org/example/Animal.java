@@ -1,8 +1,10 @@
 package org.example;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 @Entity
 public class Animal {
     @Id
@@ -12,14 +14,14 @@ public class Animal {
     private Sex sex;
     private Type type;
     private int weight;
-    private int cost;
-
+    private double cost;
     public Animal() {
     }
 
-    public Animal(String name, Type type, int weight, int cost) {
+    public Animal(String name, Type type, Sex sex, int weight, double cost) {
         this.name = name;
         this.type = type;
+        this.sex = sex;
         this.weight = weight;
         this.cost = cost;
     }
@@ -40,6 +42,14 @@ public class Animal {
         this.type = type;
     }
 
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
     public int getWeight() {
         return weight;
     }
@@ -48,7 +58,7 @@ public class Animal {
         this.weight = weight;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
